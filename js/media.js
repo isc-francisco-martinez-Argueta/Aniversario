@@ -21,13 +21,7 @@
       figure.className = 'film reveal';
 
       if (video) {
-        const player = document.createElement('video');
-        player.src = video.src;
-        player.controls = true;
-        player.preload = 'metadata';
-        player.playsInline = true;
-        if (video.poster) player.poster = video.poster;
-        figure.appendChild(player);
+        figure.appendChild(App.player.createPlayer(video));
       } else {
         figure.appendChild(emptyBlock('film__empty', 'Aquí va el video de la boda. Cópialo a media/videos y agrégalo en js/config.js'));
       }

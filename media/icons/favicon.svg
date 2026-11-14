@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="lacre" cx="35%" cy="30%" r="75%">
+      <stop offset="0" stop-color="#a85568"/>
+      <stop offset=".6" stop-color="#6b3344"/>
+      <stop offset="1" stop-color="#4a2230"/>
+    </radialGradient>
+  </defs>
+  <circle cx="32" cy="32" r="31" fill="url(#lacre)"/>
+  <circle cx="32" cy="32" r="26.500" fill="none" stroke="#c5a26b" stroke-width="1.5"/>
+  <path transform="translate(14 14.250) scale(1.5)" fill="#f8ebe7" d="M12 21s-7-4.600-9.500-9.100C.6 8.300 2.500 4 6.500 4c2.200 0 3.900 1.200 5.500 3.200C13.600 5.200 15.300 4 17.500 4c4 0 5.900 4.300 4 7.900C19 16.400 12 21 12 21z"/>
+</svg>
