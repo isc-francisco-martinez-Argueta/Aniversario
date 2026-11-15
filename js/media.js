@@ -79,6 +79,7 @@
   function createLightbox(root, photos) {
     const image = root.querySelector('#lightboxImg');
     const caption = root.querySelector('#lightboxCaption');
+    const count = root.querySelector('#lightboxCount');
     let current = 0;
     let opener = null;
 
@@ -87,6 +88,14 @@
       image.src = photos[current].src;
       image.alt = photos[current].caption || '';
       caption.textContent = photos[current].caption || '';
+      count.textContent = `${current + 1} de ${photos.length}`;
+      preload(current + 1);
+      preload(current - 1);
+    }
+
+    /** Adelanta la carga de las fotos vecinas para que pasar sea inmediato. */
+    function preload(index) {
+      new Image().src = photos[(index + photos.length) % photos.length].src;
     }
 
     function open(index) {
@@ -108,7 +117,7 @@
     root.addEventListener('click', (event) => {
       const button = event.target.closest('[data-action]');
       if (button) actions[button.dataset.action]();
-      else if (event.target === root) close();
+      else if (event.target !== image) close(); // tocar fuera de la foto cierra
     });
 
     document.addEventListener('keydown', (event) => {
@@ -116,7 +125,17 @@
       if (event.key === 'Escape') close();
       if (event.key === 'ArrowLeft') actions.prev();
       if (event.key === 'ArrowRight') actions.next();
+      if (event.key === 'Tab') trapFocus(event);
     });
+
+    /** Mantiene el foco del teclado dentro del visor mientras está abierto. */
+    function trapFocus(event) {
+      const buttons = [...root.querySelectorAll('button')];
+      const first = buttons[0];
+      const last = buttons[buttons.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    }
 
     let touchStartX = 0;
     root.addEventListener('touchstart', (event) => { touchStartX = event.touches[0].clientX; }, { passive: true });

@@ -4,9 +4,10 @@
 
   function initIntro({ onOpen }) {
     const intro = document.getElementById('intro');
-    const seal = document.getElementById('openEnvelope');
+    const envelope = document.getElementById('envelope');
 
-    seal.addEventListener('click', () => {
+    // Todo el sobre responde al toque; el sello sigue siendo el botón accesible
+    envelope.addEventListener('click', () => {
       intro.classList.add('is-open');
       document.body.classList.remove('is-locked');
       setTimeout(() => document.documentElement.classList.add('is-ready'), 1400);
@@ -17,7 +18,7 @@
   function initMusic(source) {
     const button = document.getElementById('musicToggle');
     const label = document.getElementById('musicLabel');
-    if (!source) return { play() {} };
+    if (!source) return { play() {}, pause() {} };
 
     const audio = new Audio(source);
     audio.loop = true;
@@ -33,7 +34,7 @@
     audio.addEventListener('pause', render);
     button.addEventListener('click', () => (audio.paused ? audio.play() : audio.pause()));
 
-    return { play: () => audio.play().catch(() => {}) };
+    return { play: () => audio.play().catch(() => {}), pause: () => audio.pause() };
   }
 
   App.intro = { initIntro, initMusic };

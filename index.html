@@ -47,7 +47,7 @@
         <span data-bind="initials"></span>
       </button>
     </div>
-    <p class="intro__cta">Toca el sello para abrirlo</p>
+    <p class="intro__cta">Toca el sobre para abrirlo</p>
   </div>
 
   <canvas class="petals" id="petals" aria-hidden="true"></canvas>
@@ -74,6 +74,7 @@
       </div>
       <a class="hero__scroll" href="#video" aria-label="Seguir bajando">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-4.6-9.5-9.1C.6 8.300 2.500 4 6.500 4c2.200 0 3.900 1.200 5.500 3.200C13.600 5.200 15.300 4 17.500 4c4 0 5.900 4.300 4 7.900C19 16.400 12 21 12 21z"/></svg>
+        <span class="hero__scroll-label" aria-hidden="true">Sigue bajando</span>
       </a>
     </header>
 
@@ -142,6 +143,7 @@
     <figure class="lightbox__figure">
       <img id="lightboxImg" alt="">
       <figcaption id="lightboxCaption"></figcaption>
+      <p class="lightbox__count" id="lightboxCount" aria-live="polite"></p>
     </figure>
     <button class="lightbox__btn lightbox__btn--next" type="button" data-action="next" aria-label="Foto siguiente">›</button>
   </div>

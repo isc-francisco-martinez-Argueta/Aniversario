@@ -79,6 +79,9 @@
     let tappedWhileIdle = false;
 
     root.className = 'player';
+    root.tabIndex = 0; // recibe el teclado cuando los controles están ocultos
+    root.setAttribute('role', 'group');
+    root.setAttribute('aria-label', source.title ? 'Video: ' + source.title : 'Video');
     bar.className = 'player__bar';
     bar.append(toggle, current, seek, duration, mute, fullscreen);
     root.append(video, bigPlay, bar);
@@ -106,6 +109,7 @@
       const playing = !video.paused && !video.ended;
       root.classList.toggle('is-playing', playing);
       if (playing) root.classList.add('is-started');
+      if (playing) keepFocus(bigPlay); // el botón grande se oculta al reproducir
       const label = playing ? 'Pausar' : 'Reproducir';
       toggle.setAttribute('aria-label', label);
       bigPlay.setAttribute('aria-label', label + (source.title ? ': ' + source.title : ''));
@@ -133,11 +137,21 @@
       fullscreen.setAttribute('aria-label', active ? 'Salir de pantalla completa' : 'Pantalla completa');
     }
 
+    /** Si el foco está en algo que va a ocultarse, lo sube al reproductor para no perder el teclado. */
+    function keepFocus(hiding) {
+      if (hiding.contains(document.activeElement)) root.focus({ preventScroll: true });
+    }
+
+    function hide() {
+      keepFocus(bar);
+      root.classList.add('is-idle');
+    }
+
     /** Muestra los controles y los esconde tras un rato sin actividad. */
     function wake() {
       root.classList.remove('is-idle');
       clearTimeout(hideTimer);
-      if (!video.paused) hideTimer = setTimeout(() => root.classList.add('is-idle'), HIDE_DELAY_MS);
+      if (!video.paused) hideTimer = setTimeout(hide, HIDE_DELAY_MS);
     }
 
     ['play', 'pause', 'ended'].forEach((type) => video.addEventListener(type, syncPlayback));
@@ -172,7 +186,8 @@
       ArrowRight: () => seekBy(SEEK_STEP_SECONDS),
     };
     root.addEventListener('keydown', (event) => {
-      const action = shortcuts[event.key];
+      const onPlayer = event.target === root; // en un botón, espacio ya hace lo suyo
+      const action = event.key === ' ' && onPlayer ? togglePlay : shortcuts[event.key];
       const nativeArrow = event.target === seek && event.key.startsWith('Arrow');
       if (!action || nativeArrow || event.metaKey || event.ctrlKey || event.altKey) return;
       event.preventDefault();

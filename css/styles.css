@@ -72,7 +72,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 .envelope {
   position: relative;
-  width: min(84vw, 380px, 75svh); aspect-ratio: 3 / 2;
+  width: min(84vw, 380px, 75svh); aspect-ratio: 3 / 2; cursor: pointer;
   perspective: 1200px;
   filter: drop-shadow(0 30px 30px rgba(74, 34, 48, .28));
 }
@@ -115,7 +115,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* --------------------------------------------------------------------------
    Capas flotantes
    -------------------------------------------------------------------------- */
-.petals { position: fixed; inset: 0; z-index: 40; pointer-events: none; width: 100%; height: 100%; }
+.petals { position: fixed; inset: 0; z-index: 40; pointer-events: none; width: 100%; height: 100%; transition: opacity 1.2s var(--ease); }
+/* Fuera de la portada se atenúan para no tapar fotos ni texto */
+.is-past-hero .petals { opacity: .3; }
+/* Mientras se ve el video, nada flota encima */
+.is-watching .petals { opacity: 0; }
 
 .spark {
   position: fixed; z-index: 90; pointer-events: none;
@@ -204,10 +208,13 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .counter__list span { font-size: .9rem; color: var(--salvia); filter: brightness(.75); }
 
 .hero__scroll {
-  position: absolute; bottom: 1.8rem; left: 50%; translate: -50% 0;
-  width: 34px; height: 34px; animation: heartbeat 1.6s ease-in-out infinite;
+  position: absolute; bottom: 1rem; left: 50%; translate: -50% 0;
+  display: grid; justify-items: center; gap: .15rem; min-width: 44px; min-height: 44px; padding: .3rem .8rem;
+  color: inherit; text-decoration: none; font-size: .8rem; font-style: italic; letter-spacing: .04em; white-space: nowrap;
+  opacity: 0;
 }
-.hero__scroll svg { width: 100%; height: 100%; fill: var(--ciruela); }
+.is-ready .hero__scroll { animation: rise 1.2s var(--ease) 2.4s forwards; }
+.hero__scroll svg { width: 30px; height: 30px; fill: var(--ciruela); animation: heartbeat 1.6s ease-in-out infinite; }
 
 /* --------------------------------------------------------------------------
    Capítulos
@@ -219,6 +226,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: clamp(2.8rem, 8vw, 5rem); line-height: 1.05; margin-bottom: 1rem;
 }
 .chapter__head p { font-style: italic; }
+.chapter__head h2, .chapter__head p, .hero__phrase, .place__note { text-wrap: balance; }
 
 .has-js .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1s var(--ease), transform 1s var(--ease); }
 .has-js .reveal.is-visible { opacity: 1; transform: none; }
@@ -308,10 +316,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: flex; align-items: center; gap: clamp(.35rem, 1.4vw, .8rem);
   padding: .5rem clamp(.5rem, 2vw, 1.1rem) .6rem;
   opacity: 0; visibility: hidden; translate: 0 .6rem;
-  transition: opacity .4s var(--ease), translate .4s var(--ease), visibility .4s;
+  transition: opacity .4s var(--ease), translate .4s var(--ease), visibility 0s .4s;
 }
-.player.is-started .player__bar { opacity: 1; visibility: visible; translate: 0 0; }
-.player.is-playing.is-idle .player__bar { opacity: 0; visibility: hidden; translate: 0 .6rem; }
+/* Al mostrarse es visible de inmediato (para poder recibir el foco); al ocultarse espera al desvanecido */
+.player.is-started .player__bar { opacity: 1; visibility: visible; translate: 0 0; transition-delay: 0s; }
+.player.is-playing.is-idle .player__bar { opacity: 0; visibility: hidden; translate: 0 .6rem; transition-delay: 0s, 0s, .4s; }
 
 .player__btn {
   flex: none; width: 2.4rem; height: 2.4rem; padding: 0;
@@ -321,6 +330,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .player__btn:hover { background: rgba(255, 250, 246, .16); color: #fff; }
 .player__btn:focus-visible, .player__big:focus-visible, .player__seek:focus-visible { outline-offset: 2px; }
+.player:focus-visible { outline-offset: -2px; }
 
 .player__time {
   flex: none; min-width: 2.6em; text-align: center;
@@ -354,9 +364,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .player:fullscreen video { object-fit: contain; }
 .player:fullscreen .player__bar { padding-bottom: max(.9rem, env(safe-area-inset-bottom)); }
 
+/* Táctil: áreas de toque de al menos 44px */
+@media (pointer: coarse) {
+  .player__btn { width: 2.75rem; height: 2.75rem; }
+  .player__seek { height: 2.75rem; }
+}
 @media (max-width: 600px) {
-  .player__btn { width: 2.1rem; height: 2.1rem; }
+  .player__bar { gap: .2rem; padding-inline: .2rem; }
   .player__time { font-size: .74rem; min-width: 2.3em; }
+  .player__btn--mute { display: none; } /* en el celular el volumen va con los botones del teléfono */
 }
 @media (prefers-reduced-motion: reduce) {
   .player__big::before { animation: none; opacity: 0; }
@@ -379,8 +395,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .has-js .polaroid { opacity: 0; transform: perspective(900px) translateY(60px) rotate(calc(var(--r) * 4)) scale(.9); }
 .has-js .polaroid.is-visible { opacity: 1; transform: perspective(900px) rotate(var(--r)) rotateX(var(--rx)) rotateY(var(--ry)); }
-.polaroid:hover, .polaroid:focus-visible {
-  --r: 0deg; z-index: 2; box-shadow: 0 30px 50px -20px rgba(107, 51, 68, .6);
+.polaroid:focus-visible { --r: 0deg; z-index: 2; box-shadow: 0 30px 50px -20px rgba(107, 51, 68, .6); }
+@media (hover: hover) {
+  .polaroid:hover { --r: 0deg; z-index: 2; box-shadow: 0 30px 50px -20px rgba(107, 51, 68, .6); }
 }
 .polaroid img, .polaroid__empty { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; }
 .polaroid--wide { grid-column: span 2; }
@@ -406,7 +423,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .letter__greeting { font-family: var(--font-display); font-weight: 400; font-size: 2.8rem; line-height: 1.36; }
 .letter__body p { min-height: 1.9em; margin-bottom: 1.9em; }
-.letter__body p.is-typing::after { content: ''; display: inline-block; width: 1px; height: 1em; margin-left: 2px; background: currentColor; vertical-align: -.1em; animation: blink .8s steps(1) infinite; }
+.letter:not(.is-done) { cursor: pointer; }
+.letter__rest { visibility: hidden; }
+.letter__body p.is-typing .letter__ink::after { content: ''; display: inline-block; width: 1px; height: 1em; margin-left: 2px; background: currentColor; vertical-align: -.1em; animation: blink .8s steps(1) infinite; }
 .letter__signature { font-family: var(--font-display); font-size: 2.4rem; line-height: 1.58; text-align: right; opacity: 0; transition: opacity 1.4s; }
 .letter.is-done .letter__signature { opacity: 1; }
 
@@ -433,14 +452,16 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .place__card svg { width: 58px; height: 58px; fill: none; stroke: var(--champan); stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; transition: transform .8s var(--ease); }
 .place__label { font-family: var(--font-display); font-size: clamp(2.2rem, 6vw, 2.8rem); line-height: 1; }
 .place__note { font-size: 1rem; line-height: 1.5; max-width: 22ch; }
-.place:hover .place__card { transform: translateY(-6px); border-color: var(--rosa-palo); }
-.place:hover svg { transform: rotate(18deg) scale(1.08); }
+@media (hover: hover) {
+  .place:hover .place__card { transform: translateY(-6px); border-color: var(--rosa-palo); }
+  .place:hover svg { transform: rotate(-8deg) scale(1.08); }
+}
 .place input:focus-visible + .place__card { outline: 2px solid var(--champan); outline-offset: 4px; }
 .place input:checked + .place__card {
   background: var(--rubor); color: var(--ciruela-hondo); border-color: var(--rubor);
   transform: translateY(-12px); box-shadow: 0 30px 50px -25px rgba(0, 0, 0, .6);
 }
-.places.has-choice .place input:not(:checked) + .place__card { opacity: .55; }
+.places.has-choice .place input:not(:checked) + .place__card { opacity: .7; }
 
 .invite__submit[hidden] { display: none; }
 
@@ -450,7 +471,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   color: var(--ciruela-hondo); font-weight: 500; font-size: 1.1rem;
   box-shadow: 0 14px 30px -12px rgba(197, 162, 107, .8);
   animation: rise .8s var(--ease) both, shimmer 3.5s linear infinite;
-  transition: scale .3s var(--ease);
+  transition: scale .3s var(--ease); scroll-margin-block: 1.5rem;
 }
 .invite__submit:hover { scale: 1.04; }
 
@@ -470,7 +491,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   position: fixed; inset: 0; z-index: 80; overscroll-behavior: contain;
   display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .5rem;
   padding: 1rem; background: rgba(74, 34, 48, .93); backdrop-filter: blur(6px);
-  animation: fade .4s ease both;
+  animation: fade .4s ease both; cursor: zoom-out;
 }
 .lightbox[hidden] { display: none; }
 .lightbox__figure { margin: 0; display: grid; justify-items: center; gap: .8rem; }
@@ -478,6 +499,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   max-height: 80svh; width: auto; border: 10px solid #fff;
   box-shadow: 0 30px 80px rgba(0, 0, 0, .5); animation: zoomIn .5s var(--ease) both;
 }
+.lightbox__figure img { cursor: default; }
+.lightbox__count { font-size: .8rem; letter-spacing: .14em; color: rgba(248, 235, 231, .7); font-variant-numeric: tabular-nums; }
 .lightbox__figure figcaption { font-family: var(--font-display); font-size: 2rem; color: var(--rubor); line-height: 1.1; text-align: center; }
 .lightbox__btn {
   width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(248, 235, 231, .4);
@@ -526,6 +549,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .lightbox__btn--prev, .lightbox__btn--next { position: absolute; bottom: 1rem; }
   .lightbox__btn--prev { left: 1rem; }
   .lightbox__btn--next { right: 1rem; }
+  .lightbox__count { position: absolute; bottom: 1.9rem; left: 50%; translate: -50% 0; }
 }
 
 /* Celular en horizontal y pantallas bajas */
@@ -534,6 +558,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .hero__names { font-size: clamp(3rem, 16svh, 6rem); }
   .counter { margin-top: 1.4rem; }
   .intro__cta { font-size: .9rem; }
+  .hero__scroll-label { display: none; }
   .lightbox__figure img { max-height: 70svh; }
   .lightbox__figure figcaption { font-size: 1.4rem; }
 }

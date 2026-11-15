@@ -106,15 +106,17 @@
     }
   }
 
-  function initCursorTrail() {
+  function initCursorTrail(quietSelector = '') {
+    const isQuiet = (event) => Boolean(quietSelector && event.target.closest && event.target.closest(quietSelector));
     let last = 0;
     window.addEventListener('pointermove', (event) => {
       const now = performance.now();
-      if (now - last < 60) return;
+      if (now - last < 60 || isQuiet(event)) return;
       last = now;
       spawnSpark(event.clientX, event.clientY);
     }, { passive: true });
     window.addEventListener('pointerdown', (event) => {
+      if (isQuiet(event)) return;
       for (let i = 0; i < 6; i++) spawnSpark(event.clientX, event.clientY, { spread: 70, rise: 90 });
     }, { passive: true });
   }
@@ -137,6 +139,12 @@
       callback();
     }, { threshold: .35 });
     observer.observe(element);
+  }
+
+  /** Avisa cuando un elemento entra o sale de pantalla. */
+  function watchVisibility(element, callback) {
+    if (!element) return;
+    new IntersectionObserver(([entry]) => callback(entry.isIntersecting)).observe(element);
   }
 
   /* ---------- Parallax e inclinación ---------- */
@@ -174,6 +182,6 @@
 
   App.effects = {
     reducedMotion, createPetals, spawnSpark, heartBurst, initCursorTrail,
-    observeReveal, onceVisible, initParallax, initTilt,
+    observeReveal, onceVisible, watchVisibility, initParallax, initTilt,
   };
 })(window.Aniversario);
