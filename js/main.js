@@ -73,6 +73,16 @@
     effects.initParallax(photo);
   }
 
+  /** Mientras se ve un video: sin pétalos encima y sin música de fondo compitiendo. */
+  function initVideoFocus(container, music) {
+    const sync = () => {
+      const watching = [...container.querySelectorAll('video')].some((video) => !video.paused && !video.ended);
+      document.documentElement.classList.toggle('is-watching', watching);
+      if (watching) music.pause();
+    };
+    ['play', 'pause', 'ended'].forEach((type) => container.addEventListener(type, sync, true));
+  }
+
   function init() {
     document.documentElement.classList.add('has-js');
     const weddingDate = new Date(config.weddingDate);
@@ -93,10 +103,15 @@
 
     effects.observeReveal(document.querySelectorAll('.reveal'));
     effects.observeReveal(document.querySelectorAll('.polaroid'), { stagger: 110 });
-    effects.initCursorTrail();
+    effects.initCursorTrail('.player, .lightbox');
+    // Fuera de la portada los pétalos se atenúan para no estorbar la lectura
+    effects.watchVisibility(document.getElementById('hero'), (visible) => {
+      document.documentElement.classList.toggle('is-past-hero', !visible);
+    });
 
     const petals = effects.createPetals(document.getElementById('petals'));
     const music = intro.initMusic(config.music);
+    initVideoFocus(document.getElementById('videos'), music);
     intro.initIntro({
       onOpen() {
         petals.burst();

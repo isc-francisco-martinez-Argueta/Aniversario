@@ -73,8 +73,8 @@ Aniversario.config = {
   music: '',
 
   invitation: {
-    // Tu WhatsApp con lada de país, solo números. Ej: '5215512345678'
-    whatsapp: '',
+    // Tu WhatsApp con lada de país (52 = México), solo números
+    whatsapp: '529613867848',
     // Lugares entre los que ella elige para el desayuno
     places: [
       { id: 'marriott',    label: 'Marriott',    note: 'Desayuno los cuatro, sin prisa y con mucho café.',       icon: 'cup' },

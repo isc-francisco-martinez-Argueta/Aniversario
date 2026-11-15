@@ -46,6 +46,7 @@
     placesBox.addEventListener('change', () => {
       placesBox.classList.add('has-choice');
       submit.hidden = false;
+      submit.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     });
 
     form.addEventListener('submit', (event) => {
