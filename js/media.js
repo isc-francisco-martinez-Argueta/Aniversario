@@ -93,14 +93,14 @@
       opener = document.activeElement;
       show(index);
       root.hidden = false;
-      document.body.classList.add('is-locked');
+      document.documentElement.classList.add('has-modal');
       root.querySelector('[data-action="close"]').focus();
     }
 
     function close() {
       root.hidden = true;
-      document.body.classList.remove('is-locked');
-      if (opener) opener.focus();
+      document.documentElement.classList.remove('has-modal');
+      if (opener) opener.focus({ preventScroll: true });
     }
 
     const actions = { close, prev: () => show(current - 1), next: () => show(current + 1) };

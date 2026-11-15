@@ -1,7 +1,7 @@
 # Aniversario
 
 Landing del 5.º aniversario de Aura & Francisco: sobre de bienvenida, portada con contador,
-video de la boda, galería de fotos, carta e invitación a desayunar, comer o cenar.
+video de la boda, galería de fotos, carta e invitación a desayunar en el lugar que ella elija.
 
 Sitio estático (HTML, CSS y JavaScript sin dependencias). Abre `index.html` o sírvelo con Herd.
 

@@ -61,6 +61,9 @@ Aniversario.config = {
     paragraphs: [
       'Ese día te vi caminar hacia mí y supe que nada de lo que hubiera hecho antes importaba tanto como lo que estaba por empezar.',
       'Desde entonces hemos reído, nos hemos equivocado, hemos crecido. Y cada mañana sigo encontrando un motivo nuevo para quererte.',
+      'No sabes lo feliz que me has hecho. Gracias por darme la oportunidad más grande de mi vida: elegirme como tu esposo y como papá de nuestras dos princesas.',
+      'Ana Sofía, con sus tres años recién cumplidos, y Margarita, que está por cumplir el primero, son lo más bonito que hemos hecho juntos.',
+      'Por ustedes tres lo doy todo: mi esfuerzo de cada día y todo mi amor son para ti y para ellas.',
       'Gracias por tu paciencia, por tu risa y por hacer de cualquier lugar nuestra casa.',
     ],
     signature: 'Siempre tuyo.',
@@ -72,10 +75,10 @@ Aniversario.config = {
   invitation: {
     // Tu WhatsApp con lada de país, solo números. Ej: '5215512345678'
     whatsapp: '',
-    meals: [
-      { id: 'desayuno', label: 'Desayuno', answer: 'Me encantaría desayunar contigo', note: 'Café, pan dulce y la mañana entera para nosotros.', icon: 'sunrise' },
-      { id: 'comida',   label: 'Comida', answer: 'Me encantaría ir a comer contigo', note: 'Mesa al sol y una sobremesa sin prisa.',            icon: 'sun' },
-      { id: 'cena',     label: 'Cena', answer: 'Me encantaría cenar contigo', note: 'Velas, vino y la noche por delante.',               icon: 'moon' },
+    // Lugares entre los que ella elige para el desayuno
+    places: [
+      { id: 'marriott',    label: 'Marriott',    note: 'Desayuno los cuatro, sin prisa y con mucho café.',       icon: 'cup' },
+      { id: 'holiday-inn', label: 'Holiday Inn', note: 'Desayuno los cuatro, con pan dulce para las princesas.', icon: 'cloche' },
     ],
   },
 };
