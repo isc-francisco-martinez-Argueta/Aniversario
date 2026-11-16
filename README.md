@@ -13,7 +13,9 @@ Sitio estático (HTML, CSS y JavaScript sin dependencias). Abre `index.html` o s
 - `js/effects.js`: pétalos, corazones, aparición al hacer scroll, parallax.
 - `js/intro.js`, `counter.js`, `media.js`, `letter.js`, `invitation.js`: un módulo por sección.
 - `js/main.js`: punto de entrada que conecta la configuración con los módulos.
-- `media/`: fotos, videos y música.
+- `media/`: fotos, videos y música. Las fotos de la galería se sirven en `.webp`
+  (la mitad de peso que el `.jpg`); la imagen para compartir y los iconos siguen en
+  `.jpg`/`.png` porque WhatsApp y iOS no los leen bien en `.webp`.
 - `js/player.js`: reproductor de video con controles propios.
 - `media/icons/`: icono del sitio. `media/social/compartir.jpg`: imagen de la vista previa al compartir.
 

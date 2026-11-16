@@ -58,10 +58,21 @@
     });
   }
 
+  /** El celular no necesita la versión de escritorio de la portada. */
+  function usePhotoForScreen(element, photo) {
+    const small = window.matchMedia('(max-width: 760px)');
+    const apply = () => {
+      const src = small.matches ? photo.replace(/\.webp$/, '-1200.webp') : photo;
+      element.style.backgroundImage = `url("${src}")`;
+    };
+    apply();
+    small.addEventListener('change', apply);
+  }
+
   function initHero(weddingDate) {
     const photo = document.getElementById('heroPhoto');
     if (config.hero.photo) {
-      photo.style.backgroundImage = `url("${config.hero.photo}")`;
+      usePhotoForScreen(photo, config.hero.photo);
       photo.classList.add('has-photo');
       document.getElementById('hero').classList.add('hero--photo');
     }

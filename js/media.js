@@ -5,6 +5,15 @@
   const TILTS = [-4, 3, -2, 5, -3, 2, 4, -5];
   const EMPTY_PHOTOS = 6;
 
+  /**
+   * Cada foto existe en tres tamaños: nombre.webp (original), nombre-700.webp y
+   * nombre-1200.webp. El navegador baja el que de verdad necesita según la pantalla.
+   */
+  function srcset(src) {
+    const base = src.replace(/\.webp$/, '');
+    return [`${base}-700.webp 700w`, `${base}-1200.webp 1200w`, `${src} 1800w`].join(', ');
+  }
+
   function emptyBlock(className, text) {
     const block = document.createElement('div');
     block.className = className;
@@ -56,8 +65,14 @@
         card.setAttribute('aria-label', 'Ver en grande: ' + (photo.caption || 'foto ' + (index + 1)));
         const image = document.createElement('img');
         image.src = photo.src;
+        image.srcset = srcset(photo.src);
+        image.sizes = photo.wide ? '(max-width: 600px) 92vw, 46vw' : '(max-width: 600px) 45vw, 23vw';
         image.alt = photo.caption || '';
         image.loading = 'lazy';
+        image.decoding = 'async';
+        const settle = () => image.classList.add('is-loaded');
+        if (image.complete) settle();
+        else image.addEventListener('load', settle, { once: true });
         image.addEventListener('error', () => {
           image.replaceWith(emptyBlock('polaroid__empty', 'No encontré ' + photo.src));
         });

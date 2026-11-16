@@ -26,10 +26,28 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Aura y Francisco, 5.º aniversario">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..600&family=Pinyon+Script&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- Las letras del sobre, lo primero que se ve -->
+  <link rel="preload" as="font" type="font/woff2" href="media/fonts/pinyon.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="media/fonts/fraunces-italic.woff2" crossorigin>
+
+  <!-- La foto de portada empieza a bajar desde el primer momento -->
+  <link rel="preload" as="image" href="media/fotos/hero.webp" media="(min-width: 761px)" fetchpriority="high">
+  <link rel="preload" as="image" href="media/fotos/hero-1200.webp" media="(max-width: 760px)" fetchpriority="high">
+
+  <script>
+    /* El sobre aparece cuando las letras ya están listas, para que nada cambie de forma a media vista. */
+    (function () {
+      var ready = function () { document.documentElement.classList.add('fonts-ready'); };
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(ready);
+        setTimeout(ready, 1600); // por si la red tarda, nadie se queda esperando
+      } else {
+        ready();
+      }
+    })();
+  </script>
 </head>
 <body class="is-locked">
 
