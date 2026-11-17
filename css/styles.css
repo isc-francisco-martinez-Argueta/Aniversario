@@ -66,70 +66,121 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 
 /* --------------------------------------------------------------------------
-   Sobre de bienvenida
+   Invitación de bienvenida: réplica de la de nuestra boda
+   (solapas de encaje plateado, tarjeta crema sobre marco champán)
    -------------------------------------------------------------------------- */
 .intro {
   position: fixed; inset: 0; z-index: 100;
-  display: grid; place-content: center; justify-items: center; gap: clamp(.8rem, 4svh, 2.2rem);
+  display: grid; place-content: center; justify-items: center; gap: clamp(.8rem, 3.5svh, 2rem);
   padding: 1rem; text-align: center; overflow: hidden;
   background:
     radial-gradient(circle at 20% 15%, #fff6f2 0, transparent 45%),
     radial-gradient(circle at 85% 85%, #dcb3b3 0, transparent 50%),
     var(--rosa-palo);
-  transition: opacity 1.1s var(--ease) 1.5s, visibility 0s linear 2.6s;
+  transition: opacity 1.1s var(--ease), visibility 0s linear 1.1s;
 }
-.intro.is-open { opacity: 0; visibility: hidden; }
+/* is-open: solapas abiertas · is-waiting: ya se puede continuar · is-leaving: da paso a la página */
+.intro.is-leaving { opacity: 0; visibility: hidden; }
 
-.intro > * { opacity: 0; transition: opacity .9s var(--ease), transform .9s var(--ease); transform: translateY(14px); }
+.intro > * { opacity: 0; transition: opacity .9s var(--ease), transform .9s var(--ease), scale 1.8s var(--ease); transform: translateY(14px); }
 .fonts-ready .intro > * { opacity: 1; transform: none; }
-.fonts-ready .intro .envelope { transition-delay: .12s; }
+.fonts-ready .intro .gatefold { transition-delay: .12s; }
 .fonts-ready .intro__cta { transition-delay: .3s; }
 
-.intro__hint { font-family: var(--font-display); font-size: clamp(2rem, min(7vw, 11svh), 3.6rem); line-height: 1; }
+.intro__hint { font-family: var(--font-display); font-size: clamp(2rem, min(7vw, 9svh), 3.6rem); line-height: 1; }
 .intro__cta { font-style: italic; font-size: 1rem; animation: breathe 2.4s ease-in-out infinite; }
 .intro.is-open .intro__hint, .intro.is-open .intro__cta { opacity: 0; transition: opacity .4s; }
+.intro.is-open .intro__cta { animation: none; }
+.intro.is-waiting .intro__cta { opacity: 1; transition: opacity .9s var(--ease); animation: breathe 2.4s ease-in-out .9s infinite; }
 
-.envelope {
-  position: relative;
-  width: min(84vw, 380px, 75svh); aspect-ratio: 3 / 2; cursor: pointer;
-  perspective: 1200px;
-  filter: drop-shadow(0 30px 30px rgba(74, 34, 48, .28));
+.gatefold {
+  --ink: #3f383b;
+  position: relative; container-type: inline-size;
+  width: min(64vw, 300px, 42svh); aspect-ratio: 5 / 7; cursor: pointer;
+  perspective: 1400px;
 }
-.envelope__back, .envelope__front, .envelope__flap { position: absolute; inset: 0; }
-.envelope__back { background: #f3dcd8; border-radius: 6px; }
-.envelope__front {
-  background: linear-gradient(180deg, #fdf1ed, #f6e2dd);
-  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
-  border-radius: 6px; z-index: 3;
+.gatefold__back {
+  position: absolute; inset: 0; border-radius: 3px;
+  background: linear-gradient(135deg, #eef0f3, #b4b9c1 38%, #f1f2f4 58%, #a7acb5);
+  box-shadow: 0 28px 36px -14px rgba(74, 34, 48, .45);
 }
-.envelope__flap {
-  background: linear-gradient(180deg, #f1d5d1, #f9e8e4);
-  clip-path: polygon(0 0, 100% 0, 50% 58%);
-  transform-origin: top; z-index: 4;
-  transition: transform .9s var(--ease), z-index 0s .45s;
+.gatefold__card {
+  position: absolute; inset: 2.4% 3.4%; padding: 3.2cqw; display: grid;
+  background: linear-gradient(135deg, #ead7b2, #cdb084 48%, #ecdcbb);
+  box-shadow: 0 1px 4px rgba(63, 56, 59, .35);
 }
-.envelope__card {
-  position: absolute; inset: 8% 7% 10%; z-index: 2;
-  display: grid; place-items: center;
-  background: var(--marfil); border-radius: 4px;
-  font-family: var(--font-display); font-size: clamp(1.8rem, 7vw, 2.8rem);
-  transition: transform 1.1s var(--ease) .6s;
+/* Con las solapas cerradas, la tarjeta queda en penumbra */
+.gatefold__card::after {
+  content: ''; position: absolute; inset: 0; background: rgba(58, 40, 50, .2);
+  transition: opacity 1.2s var(--ease) .3s;
 }
-.envelope__seal {
-  position: absolute; left: 50%; top: 56%; z-index: 5;
-  width: 74px; height: 74px; translate: -50% -50%;
-  border: 0; border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #a85568, var(--ciruela) 60%, var(--ciruela-hondo));
-  color: #f6dcd3; font-family: var(--font-display); font-size: 1.7rem;
-  box-shadow: 0 6px 14px rgba(74, 34, 48, .45), inset 0 0 0 5px rgba(255, 255, 255, .08);
+.gatefold__paper {
+  display: grid; align-content: space-between; justify-items: center; gap: 1cqw;
+  min-width: 0; padding: 6cqw 3cqw 5cqw; color: var(--ink);
+  background: radial-gradient(circle at 30% 20%, #fffdf8, #f8f1e4);
+}
+/* La tinta aparece al abrirse las solapas: cerrada, el encaje se ve limpio sobre el papel */
+.gatefold__paper > * { opacity: 0; transition: opacity 1s var(--ease) .7s; }
+.gatefold__verse, .gatefold__names, .gatefold__blessing, .gatefold__venue { font-family: var(--font-display); line-height: 1.1; }
+.gatefold__verse { justify-self: stretch; display: grid; font-size: 6.4cqw; }
+.gatefold__verse small { justify-self: end; font-size: .62em; opacity: .8; }
+.gatefold__names { font-size: 11.4cqw; white-space: nowrap; }
+.gatefold__blessing { font-size: 5cqw; }
+.gatefold__flourish { width: 36cqw; fill: none; stroke: currentColor; stroke-width: 1; stroke-linecap: round; }
+.gatefold__flourish circle { fill: currentColor; stroke: none; }
+.gatefold__date {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 2.4cqw;
+  font-size: 4.3cqw; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; line-height: 1.25;
+}
+.gatefold__date > p { display: grid; }
+.gatefold__date > p:last-child { font-size: 1.5em; letter-spacing: .02em; line-height: 1; }
+.gatefold__date small { font-size: .5em; font-weight: 600; letter-spacing: .1em; }
+/* El día va entre dos flechas, cada dígito en su círculo, como en la original */
+.gatefold__day { grid-auto-flow: column; align-items: center; gap: 1cqw; }
+.gatefold__day span {
+  display: grid; place-items: center; width: 8.6cqw; aspect-ratio: 1; border-radius: 50%;
+  background: var(--ink); color: #fbf6ec; font-size: 1.4em; letter-spacing: 0;
+}
+.gatefold__day::before, .gatefold__day::after {
+  content: ''; width: 2.6cqw; height: 12cqw; margin-inline: .6cqw;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 40'%3E%3Cpath d='M4 3v30M1.500 2 4 5l2.500-3M1.500 5.500 4 8.500l2.500-3' fill='none' stroke='%233f383b' stroke-width='.9' stroke-linecap='round'/%3E%3Cpath d='M4 39 1.800 32.500h4.400z' fill='%233f383b'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.gatefold__day::after { rotate: 180deg; }
+.gatefold__venue { font-size: 6cqw; }
+
+.gatefold__flap {
+  position: absolute; top: 0; bottom: 0; z-index: 3; width: 54%;
+  transition: transform 1.6s var(--ease) .25s;
+}
+.gatefold__flap::before {
+  content: ''; position: absolute; inset: 0;
+  background: url('../media/intro/encaje.svg') center / 100% 100% no-repeat;
+}
+.gatefold__flap--left { left: 0; transform-origin: left center; }
+.gatefold__flap--right { right: 0; z-index: 4; transform-origin: right center; transition-delay: .4s; }
+.gatefold__flap--right::before { scale: -1 1; }
+
+/* Sello: el monograma de nuestra boda sobre una placa crema con filo champán */
+.gatefold__seal {
+  position: absolute; left: 50%; top: 50%; z-index: 5;
+  width: 64cqw; aspect-ratio: 2 / 1; translate: -50% -50%;
+  display: grid; place-items: center; padding: 0;
+  border: 1px solid #cdb084; border-radius: 50%;
+  background: radial-gradient(circle at 35% 25%, #fffdf8, #f5ebd8);
+  box-shadow: 0 6px 14px rgba(74, 34, 48, .45);
   animation: pulse 2.2s ease-in-out infinite;
   transition: opacity .4s, scale .4s;
 }
-.envelope__seal:hover { scale: 1.07; }
+.gatefold__seal::before { content: ''; position: absolute; inset: 3px; border: 1px solid rgba(205, 176, 132, .85); border-radius: inherit; }
+.gatefold__seal img { width: 76%; height: auto; }
+.gatefold__seal:hover { scale: 1.07; }
 
-.intro.is-open .envelope__flap { transform: rotateX(180deg); z-index: 1; }
-.intro.is-open .envelope__card { transform: translateY(-62%); }
-.intro.is-open .envelope__seal { opacity: 0; scale: .5; pointer-events: none; }
+.intro.is-open .gatefold { scale: 1.08; }
+.intro.is-open .gatefold__flap--left { transform: rotateY(-124deg); }
+.intro.is-open .gatefold__flap--right { transform: rotateY(124deg); }
+.intro.is-open .gatefold__card::after { opacity: 0; }
+.intro.is-open .gatefold__paper > * { opacity: 1; }
+.intro.is-open .gatefold__seal { opacity: 0; scale: .5; pointer-events: none; }
 
 /* --------------------------------------------------------------------------
    Capas flotantes

@@ -28,7 +28,9 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- Las letras del sobre, lo primero que se ve -->
+  <!-- Las letras y el encaje de la invitación, lo primero que se ve -->
+  <link rel="preload" as="image" type="image/svg+xml" href="media/intro/encaje.svg">
+  <link rel="preload" as="image" type="image/webp" href="media/intro/monograma.webp">
   <link rel="preload" as="font" type="font/woff2" href="media/fonts/pinyon.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="media/fonts/fraunces-italic.woff2" crossorigin>
 
@@ -37,7 +39,7 @@
   <link rel="preload" as="image" href="media/fotos/hero-1200.webp" media="(max-width: 760px)" fetchpriority="high">
 
   <script>
-    /* El sobre aparece cuando las letras ya están listas, para que nada cambie de forma a media vista. */
+    /* La invitación aparece cuando las letras ya están listas, para que nada cambie de forma a media vista. */
     (function () {
       var ready = function () { document.documentElement.classList.add('fonts-ready'); };
       if (document.fonts && document.fonts.ready) {
@@ -51,21 +53,32 @@
 </head>
 <body class="is-locked">
 
-  <!-- Sobre de bienvenida -->
+  <!-- Invitación de bienvenida: réplica de la de nuestra boda -->
   <div class="intro" id="intro">
     <p class="intro__hint">Tengo algo para ti</p>
-    <div class="envelope" id="envelope">
-      <div class="envelope__back"></div>
-      <div class="envelope__card">
-        <span data-bind="names"></span>
+    <div class="gatefold" id="gatefold">
+      <div class="gatefold__back"></div>
+      <div class="gatefold__card">
+        <div class="gatefold__paper">
+          <p class="gatefold__verse"><span data-bind="verse"></span><small data-bind="verseRef"></small></p>
+          <p class="gatefold__names" data-bind="names"></p>
+          <p class="gatefold__blessing" data-bind="blessing"></p>
+          <svg class="gatefold__flourish" viewBox="0 0 120 16" aria-hidden="true"><path d="M60 8c-6-7-15-7-20-2s-3 9 2 8 5-6 0-6M60 8c6-7 15-7 20-2s3 9-2 8-5-6 0-6M38 8H6M82 8h32"/><circle cx="60" cy="8" r="1.6"/></svg>
+          <div class="gatefold__date" id="weddingDate">
+            <p><span data-date="month"></span><span data-date="year"></span></p>
+            <p class="gatefold__day" data-date="day"></p>
+            <p><span data-date="time"></span><small>hrs</small></p>
+          </div>
+          <p class="gatefold__venue" data-bind="venue"></p>
+        </div>
       </div>
-      <div class="envelope__front"></div>
-      <div class="envelope__flap"></div>
-      <button class="envelope__seal" id="openEnvelope" type="button" aria-label="Abrir el sobre">
-        <span data-bind="initials"></span>
+      <div class="gatefold__flap gatefold__flap--left"></div>
+      <div class="gatefold__flap gatefold__flap--right"></div>
+      <button class="gatefold__seal" id="openInvitation" type="button" aria-label="Abrir la invitación">
+        <img src="media/intro/monograma.webp" alt="" width="440" height="201">
       </button>
     </div>
-    <p class="intro__cta">Toca el sobre para abrirlo</p>
+    <p class="intro__cta" id="introCta" data-continue="Toca la invitación para continuar">Toca la invitación para abrirla</p>
   </div>
 
   <canvas class="petals" id="petals" aria-hidden="true"></canvas>

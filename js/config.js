@@ -7,11 +7,19 @@ window.Aniversario = window.Aniversario || {};
 Aniversario.config = {
   couple: {
     names: 'Aura & Francisco',     // Como aparecerán en grande
-    initials: 'A&F',        // Sello del sobre (máx. 3 caracteres)
   },
 
   // Fecha y hora de la boda (AAAA-MM-DDTHH:MM)
   weddingDate: '2021-12-04T19:00',
+
+  // Invitación de la boda que se abre al entrar (la fecha sale de weddingDate)
+  weddingInvitation: {
+    verse: 'Dios es amor',
+    verseRef: '1 Juan 4:16',
+    blessing: 'Con la bendición de Dios y de nuestros padres',
+    venue: 'Tuxtla Gutiérrez, Chiapas',
+    openSeconds: 7,    // Tiempo que queda abierta si no la tocan para continuar
+  },
 
   hero: {
     photo: 'media/fotos/hero.webp',

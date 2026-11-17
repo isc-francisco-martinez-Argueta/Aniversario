@@ -1,18 +1,67 @@
-/** Sobre de bienvenida: se abre al tocar el sello y da paso a la página. */
+/** Invitación de bienvenida: las solapas de encaje se abren al tocarla y dan paso a la página. */
 (function (App) {
   'use strict';
 
-  function initIntro({ onOpen }) {
-    const intro = document.getElementById('intro');
-    const envelope = document.getElementById('envelope');
+  /** Lo que tardan las solapas en abrirse; antes de eso un toque no cuenta como "continuar". */
+  const FLAPS_OPEN_MS = 2000;
 
-    // Todo el sobre responde al toque; el sello sigue siendo el botón accesible
-    envelope.addEventListener('click', () => {
-      intro.classList.add('is-open');
+  /** Escribe la fecha de la boda en la tarjeta: mes y año, día (un círculo por dígito) y hora. */
+  function renderWeddingDate(container, date) {
+    if (isNaN(date)) return;
+    const part = (options) => new Intl.DateTimeFormat('es-MX', options).format(date);
+    const slot = (name) => container.querySelector(`[data-date="${name}"]`);
+
+    slot('month').textContent = part({ month: 'long' });
+    slot('year').textContent = part({ year: 'numeric' });
+    slot('time').textContent = part({ hour: '2-digit', minute: '2-digit', hour12: false });
+    slot('day').replaceChildren(...[...part({ day: '2-digit' })].map((digit) => {
+      const span = document.createElement('span');
+      span.textContent = digit;
+      return span;
+    }));
+  }
+
+  /**
+   * Primer toque: se abren las solapas (onOpen). Segundo toque, o al pasar openSeconds:
+   * la invitación da paso a la página (onEnter).
+   */
+  function initIntro({ weddingDate, openSeconds, onOpen, onEnter }) {
+    const intro = document.getElementById('intro');
+    const gatefold = document.getElementById('gatefold');
+    const seal = document.getElementById('openInvitation');
+    const cta = document.getElementById('introCta');
+    let autoEnter;
+
+    renderWeddingDate(document.getElementById('weddingDate'), weddingDate);
+
+    const enter = () => {
+      clearTimeout(autoEnter);
+      gatefold.removeEventListener('click', onTap);
+      intro.classList.add('is-leaving');
       document.body.classList.remove('is-locked');
-      setTimeout(() => document.documentElement.classList.add('is-ready'), 1400);
+      document.documentElement.classList.add('is-ready');
+      onEnter();
+    };
+
+    const inviteToContinue = () => {
+      cta.textContent = cta.dataset.continue;
+      seal.setAttribute('aria-label', cta.dataset.continue);
+      intro.classList.add('is-waiting');
+    };
+
+    const open = () => {
+      intro.classList.add('is-open');
+      setTimeout(inviteToContinue, FLAPS_OPEN_MS);
+      autoEnter = setTimeout(enter, openSeconds * 1000);
       onOpen();
-    }, { once: true });
+    };
+
+    // Toda la invitación responde al toque; el sello sigue siendo el botón accesible
+    function onTap() {
+      if (!intro.classList.contains('is-open')) open();
+      else if (intro.classList.contains('is-waiting')) enter();
+    }
+    gatefold.addEventListener('click', onTap);
   }
 
   function initMusic(source) {

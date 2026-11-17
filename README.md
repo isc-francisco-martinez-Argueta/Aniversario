@@ -1,6 +1,6 @@
 # Aniversario
 
-Landing del 5.º aniversario de Aura & Francisco: sobre de bienvenida, portada con contador,
+Landing del 5.º aniversario de Aura & Francisco: invitación de boda que se abre al entrar, portada con contador,
 video de la boda, galería de fotos, carta e invitación a desayunar en el lugar que ella elija.
 
 Sitio estático (HTML, CSS y JavaScript sin dependencias). Abre `index.html` o sírvelo con Herd.
@@ -17,6 +17,7 @@ Sitio estático (HTML, CSS y JavaScript sin dependencias). Abre `index.html` o s
   (la mitad de peso que el `.jpg`); la imagen para compartir y los iconos siguen en
   `.jpg`/`.png` porque WhatsApp y iOS no los leen bien en `.webp`.
 - `js/player.js`: reproductor de video con controles propios.
+- `media/intro/`: solapa de encaje (`encaje.svg`) y monograma de la boda (`monograma.webp`) de la invitación del intro.
 - `media/icons/`: icono del sitio. `media/social/compartir.jpg`: imagen de la vista previa al compartir.
 
 ## Vista previa al compartir

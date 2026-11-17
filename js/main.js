@@ -7,14 +7,17 @@
   function bindTexts() {
     const texts = {
       names: config.couple.names,
-      initials: config.couple.initials,
       phrase: config.hero.phrase,
+      verse: config.weddingInvitation.verse,
+      verseRef: config.weddingInvitation.verseRef,
+      blessing: config.weddingInvitation.blessing,
+      venue: config.weddingInvitation.venue,
       greeting: config.letter.greeting,
       signature: config.letter.signature,
     };
     document.querySelectorAll('[data-bind]').forEach((element) => {
       const key = element.dataset.bind;
-      if (key === 'names' || key === 'initials') renderNames(element, texts[key]);
+      if (key === 'names') renderNames(element, texts[key]);
       else element.textContent = texts[key] || '';
     });
     document.title = `${config.couple.names} · 5.º aniversario`;
@@ -124,10 +127,10 @@
     const music = intro.initMusic(config.music);
     initVideoFocus(document.getElementById('videos'), music);
     intro.initIntro({
-      onOpen() {
-        petals.burst();
-        music.play();
-      },
+      weddingDate,
+      openSeconds: config.weddingInvitation.openSeconds,
+      onOpen: () => music.play(),
+      onEnter: () => petals.burst(),
     });
   }
 
