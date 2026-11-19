@@ -128,6 +128,7 @@
     initVideoFocus(document.getElementById('videos'), music);
     intro.initIntro({
       weddingDate,
+      availableFrom: new Date(config.availableFrom),
       openSeconds: config.weddingInvitation.openSeconds,
       onOpen: () => music.play(),
       onEnter: () => petals.burst(),

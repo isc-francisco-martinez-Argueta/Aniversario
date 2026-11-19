@@ -12,6 +12,11 @@ Aniversario.config = {
   // Fecha y hora de la boda (AAAA-MM-DDTHH:MM)
   weddingDate: '2021-12-04T19:00',
 
+  // La invitación no se puede abrir antes de esta fecha (AAAA-MM-DDTHH:MM, hora del
+  // teléfono de quien la ve). Déjala vacía ('') para que esté siempre disponible.
+  // Para verla antes de tiempo, agrega ?adelanto al final de la dirección.
+  availableFrom: '2026-11-30T00:00',
+
   // Invitación de la boda que se abre al entrar (la fecha sale de weddingDate)
   weddingInvitation: {
     verse: 'Dios es amor',

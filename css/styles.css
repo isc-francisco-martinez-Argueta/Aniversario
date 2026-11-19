@@ -175,6 +175,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .gatefold__seal img { width: 76%; height: auto; }
 .gatefold__seal:hover { scale: 1.07; }
 
+/* Sellada: aún no llega la fecha (config.availableFrom), así que no invita a tocar */
+.intro.is-sealed .gatefold, .intro.is-sealed .gatefold__seal { cursor: default; }
+.intro.is-sealed .gatefold__seal { animation: none; scale: none; }
+.intro.is-sealed .intro__cta { animation: none; line-height: 1.5; }
+.intro__cta small { display: block; font-size: .85em; opacity: .75; }
+
 .intro.is-open .gatefold { scale: 1.08; }
 .intro.is-open .gatefold__flap--left { transform: rotateY(-124deg); }
 .intro.is-open .gatefold__flap--right { transform: rotateY(124deg); }

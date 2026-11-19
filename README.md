@@ -20,6 +20,12 @@ Sitio estático (HTML, CSS y JavaScript sin dependencias). Abre `index.html` o s
 - `media/intro/`: solapa de encaje (`encaje.svg`) y monograma de la boda (`monograma.webp`) de la invitación del intro.
 - `media/icons/`: icono del sitio. `media/social/compartir.jpg`: imagen de la vista previa al compartir.
 
+## Fecha de apertura
+
+`availableFrom` en `js/config.js` mantiene sellada la invitación del intro hasta esa fecha
+(muestra cuándo se podrá abrir y cuánto falta). Para revisarla antes, abre el sitio con
+`?adelanto` al final de la dirección. Es un candado del navegador: usa la hora del teléfono.
+
 ## Vista previa al compartir
 
 Las etiquetas `og:*` de `index.html` usan la URL pública del sitio. Si cambia el dominio, actualiza `og:url` y `og:image`.
